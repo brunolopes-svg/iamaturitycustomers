@@ -116,7 +116,7 @@ const USE_CASES = [
     id:     "cx",
     icon:   "💬",
     title:  "Reduzir Custo de Atendimento",
-    desc:   "Automatizar FAQs, reduzir TMA, melhorar FCR e CSAT com IA Agêntica",
+    desc:   "Automatizar atendimentos repetitivos, reduzir o tempo de espera e resolver mais no 1º contato com IA Agêntica",
     detail: "Ideal para empresas com contact center ou atendimento digital que buscam automação e eficiência operacional.",
     tags:   ["Contact Center","FAQ AI","Chatbot","Omnichannel"],
     color:  C.purple,
@@ -217,12 +217,23 @@ const UC_DIMS = {
     {
       id:"cx_operacao", label:"Operação de Atendimento", short:"Operação", color:C.pink,
       qs:[
-        { id:"cx_o1", text:"Qual é o TMA (Tempo Médio de Atendimento) atual?", w:1.2,
-          opts:[{v:10,l:"Não medimos"},{v:25,l:"> 15 min"},{v:50,l:"10–15 min"},{v:75,l:"5–10 min"},{v:100,l:"< 5 min"}]},
-        { id:"cx_o2", text:"Qual é a taxa de FCR (resolução no 1º contato)?", w:1.2,
-          opts:[{v:10,l:"Não medimos"},{v:25,l:"< 50%"},{v:50,l:"50%–65%"},{v:75,l:"65%–80%"},{v:100,l:"> 80%"}]},
+        { id:"cx_o1", text:"Qual é a duração média dos atendimentos?", w:1.2,
+          opts:[{v:10,l:"Não medimos"},{v:25,l:"Mais de 15 minutos"},{v:50,l:"10 a 15 minutos"},{v:75,l:"5 a 10 minutos"},{v:100,l:"Menos de 5 minutos"}]},
+        { id:"cx_o2", text:"Qual é a taxa de resolução no 1º contato (sem precisar escalar)?", w:1.2,
+          opts:[{v:10,l:"Não medimos"},{v:25,l:"Menos de 50%"},{v:50,l:"50% a 65%"},{v:75,l:"65% a 80%"},{v:100,l:"Mais de 80%"}]},
         { id:"cx_o3", text:"Os processos de atendimento estão documentados?", w:1,
           opts:[{v:0,l:"Nada documentado"},{v:25,l:"Parcialmente"},{v:55,l:"Principais processos"},{v:80,l:"Todos com revisão"},{v:100,l:"Otimizados com melhoria contínua"}]},
+        { id:"cx_o4",
+          text:"Em qual % dos atendimentos o analista precisa ver a tela do cliente para resolver?",
+          hint:"O Zenvia Instant Support captura a tela do produto automaticamente — resolve esse caso e reduz o tempo de atendimento sem intervenção manual.",
+          w:1.5,
+          opts:[
+            {v:100,l:"Não acontece"},
+            {v:70, l:"Menos de 10% dos atendimentos"},
+            {v:40, l:"10% a 30% — ocorre com frequência"},
+            {v:15, l:"30% a 60% — problema recorrente"},
+            {v:5,  l:"Mais de 60% — gargalo crítico"},
+          ]},
       ],
     },
     {
@@ -244,7 +255,7 @@ const UC_DIMS = {
         { id:"cx_t2", text:"Há automação de atendimento implantada hoje?", w:1.2,
           opts:[{v:0,l:"Nenhuma"},{v:25,l:"IVR/URA básico"},{v:45,l:"Templates e bot estático"},{v:70,l:"Bot NLP ou automação via API"},{v:100,l:"Múltiplas automações integradas"}]},
         { id:"cx_t3", text:"Qual é o nível de observabilidade das conversas?", w:1,
-          opts:[{v:0,l:"Sem monitoração"},{v:25,l:"Volume e SLA apenas"},{v:50,l:"CSAT e TMA manuais"},{v:75,l:"Dashboard em tempo real"},{v:100,l:"Analytics avançado com IA"}]},
+          opts:[{v:0,l:"Sem monitoração"},{v:25,l:"Volume e SLA apenas"},{v:50,l:"CSAT e tempo médio — manuais"},{v:75,l:"Dashboard em tempo real"},{v:100,l:"Analytics avançado com IA"}]},
       ],
     },
     {
@@ -426,7 +437,7 @@ const PRODUCTS = {
     },
     {
       icon:"🔍", name:"Zenvia Instant Support",
-      desc:"Analista N1/N2 autônomo — vê o que o cliente vê (HTML da tela), sabe o que a empresa sabe (RAG de documentação), diagnostica o sistema via APIs internas e prepara o especialista para um Handover Inteligente. Agent-as-a-Judge monitora 100% das interações.",
+      desc:"Agente N1/N2 que captura a tela do produto do cliente automaticamente, acessa base de conhecimento via RAG, diagnostica via APIs e decide: resolver, escalar com contexto completo ou acionar handover. Elimina o gargalo de pedir acesso visual à tela do cliente.",
       level:2, badge:"HIGH IMPACT", color:C.pink,
     },
     {
@@ -542,7 +553,7 @@ const PRODUCTS = {
 const ROADMAPS = {
   cx:[
     {p:1,name:"Fundação FAQ & Knowledge",time:"0–3 meses",c:C.yellow,kpi:"Deflexão >30% com FAQ AI",items:["Estruturar Knowledge Base (top 100 FAQs)","Implantar Zenvia FAQ AI no WhatsApp","Criar AI Policy básica","Mapeamento de intents por volume"]},
-    {p:2,name:"Chatbot Híbrido + Copiloto",time:"3–9 meses",c:C.blue,kpi:"Automação >50%, TMA -20%",items:["Chatbot NLP com integração CRM","Copiloto para agentes humanos","Observabilidade de conversas","Capacitação do time em IA"]},
+    {p:2,name:"Chatbot Híbrido + Copiloto",time:"3–9 meses",c:C.blue,kpi:"Automação >50%, tempo de atendimento -20%",items:["Chatbot NLP com integração CRM","Copiloto para agentes humanos","Observabilidade de conversas","Capacitação do time em IA"]},
     {p:3,name:"AI Agents Operacionais",time:"9–18 meses",c:C.purple,kpi:"Automação E2E >60%",items:["AI Agents para top 3 jornadas","Voice AI (IVR inteligente)","Analytics preditivo de CX","HITL formal + auditoria de IA"]},
     {p:4,name:"Agentic Enterprise",time:"18–36 meses",c:C.pink,kpi:"Automação >80%",items:["Multi-Agent Orchestration","Data Platform unificado","Responsible AI Framework","CX autônoma e personalizada"]},
   ],
@@ -837,8 +848,8 @@ function Navbar({ onBack }) {
             ← Voltar
           </button>
         )}
-        <button style={{ background:G.brand, color:"#FFFFFF", border:"none", borderRadius:8, padding:"9px 22px", cursor:"pointer", fontSize:13, fontWeight:700, fontFamily:F.exo, boxShadow:"0 4px 16px rgba(142,9,207,.3)" }}>
-          Falar com Especialista
+        <button onClick={()=>window.open("https://wa.me/551148377415?text=Olá,%20vim%20pelo%20Diagnóstico%20de%20IA%20da%20Zenvia%20e%20gostaria%20de%20falar%20com%20um%20especialista.","_blank")} style={{ background:G.brand, color:"#FFFFFF", border:"none", borderRadius:8, padding:"9px 22px", cursor:"pointer", fontSize:13, fontWeight:700, fontFamily:F.exo, boxShadow:"0 4px 16px rgba(142,9,207,.3)" }}>
+          💬 Falar com Especialista
         </button>
       </div>
     </nav>
@@ -931,8 +942,8 @@ function Landing({ onStart }) {
             <button onClick={onStart} style={{ background:G.brand, color:"#fff", border:"none", borderRadius:12, padding:"17px 44px", fontSize:16, fontWeight:700, cursor:"pointer", boxShadow:"0 10px 40px rgba(142,9,207,.4)", fontFamily:F.exo, letterSpacing:.5 }}>
               Descobrir Como Está Minha Empresa
             </button>
-            <button style={{ background:"rgba(255,255,255,.08)", color:"rgba(255,255,255,.9)", border:"1px solid rgba(255,255,255,.22)", borderRadius:12, padding:"17px 28px", fontSize:16, cursor:"pointer", fontFamily:F.nunito, fontWeight:"600" }}>
-              Falar com Especialista
+            <button onClick={()=>window.open("https://wa.me/551148377415?text=Olá,%20vim%20pelo%20Diagnóstico%20de%20IA%20da%20Zenvia%20e%20gostaria%20de%20falar%20com%20um%20especialista.","_blank")} style={{ background:"rgba(255,255,255,.08)", color:"rgba(255,255,255,.9)", border:"1px solid rgba(255,255,255,.22)", borderRadius:12, padding:"17px 28px", fontSize:16, cursor:"pointer", fontFamily:F.nunito, fontWeight:"600" }}>
+              💬 Falar com Especialista
             </button>
           </div>
           <div style={{ display:"flex", justifyContent:"center", flexWrap:"wrap" }}>
@@ -1202,9 +1213,16 @@ function Assessment({ ucId, onComplete, onBack }) {
               <div style={{ fontSize:12, color:C.t3, fontFamily:F.nunito }}>Pergunta {qi + 1} de {qs.length}</div>
             </div>
           </div>
-          <h2 style={{ fontSize:"clamp(17px,3vw,22px)", fontWeight:700, lineHeight:1.45, margin:"0 0 24px", color:C.t1, fontFamily:F.exo }}>
+          <h2 style={{ fontSize:"clamp(17px,3vw,22px)", fontWeight:700, lineHeight:1.45, margin:"0 0 8px", color:C.t1, fontFamily:F.exo }}>
             {q ? q.text : ""}
           </h2>
+          {q && q.hint && (
+            <div style={{ display:"flex", alignItems:"flex-start", gap:8, background:"rgba(142,9,207,.06)", border:"1.5px solid rgba(142,9,207,.15)", borderRadius:10, padding:"10px 14px", marginBottom:16 }}>
+              <span style={{ fontSize:15, flexShrink:0 }}>💡</span>
+              <p style={{ fontSize:12, color:C.t2, fontFamily:F.nunito, lineHeight:1.6 }}>{q.hint}</p>
+            </div>
+          )}
+          {q && !q.hint && <div style={{ marginBottom:16 }} />}
           <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
             {q && q.opts.map(opt => (
               <button key={opt.v} onClick={() => setSel(opt.v)} style={{ background:sel === opt.v ? "rgba(142,9,207,.16)" : "rgba(255,255,255,.03)", border:"1px solid " + (sel === opt.v ? C.purple : "rgba(255,255,255,.08)"), borderRadius:10, padding:"13px 18px", cursor:"pointer", textAlign:"left", color:sel === opt.v ? C.t1 : C.t2, fontSize:14, display:"flex", alignItems:"center", gap:14, transition:"all .15s", fontFamily:F.nunito }}>
@@ -1562,7 +1580,7 @@ function Results({ scores, ctx, ucId, narrative, onBack }) {
               <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12 }}>
                 {[
                   { l:"Potencial de Automação", v:ops.deflPot + "%",    c:C.yellow, d:"Volume automatizável" },
-                  { l:"Redução Esforço",         v:"-" + ops.tmaRed + "%",c:C.blue,   d:"Trabalho manual" },
+                  { l:"Redução no Tempo",        v:"-" + ops.tmaRed + "%",c:C.blue,   d:"Duração dos atendimentos" },
                   { l:"Ganho de Eficiência",      v:"+" + ops.fcrGain + "%",c:C.purple,d:"Melhora operacional" },
                   { l:"Savings/Mês",              v:"R$" + Math.round((ops.moneySaved || 0) / 1000) + "K", c:C.pink, d:"Estimado com IA Agêntica" },
                 ].map(m => (
@@ -1728,10 +1746,10 @@ function Results({ scores, ctx, ucId, narrative, onBack }) {
                 {[
                   { l:"Duração Estimada",      v:"24–36 meses",         c:C.purple },
                   { l:"Investimento",           v:"Conforme proposta",   c:C.pink   },
-                  { l:"Próximo passo",          v:"Falar c/ especialista", c:C.yellow },
+                  { l:"Próximo passo",          v:"💬 Falar com Especialista", c:C.yellow, wa:true },
                 ].map(m => (
-                  <Card key={m.l} style={{ textAlign:"center", padding:"16px 12px" }}>
-                    <div style={{ fontSize:m.l === "Investimento" ? 14 : 20, fontWeight:900, color:m.c, marginBottom:4, fontFamily:F.exo, lineHeight:1.2 }}>{m.v}</div>
+                  <Card key={m.l} onClick={m.wa ? ()=>window.open("https://wa.me/551148377415?text=Ol%C3%A1%2C%20vim%20pelo%20Diagn%C3%B3stico%20de%20IA%20da%20Zenvia%20e%20gostaria%20de%20falar%20com%20um%20especialista.","_blank") : undefined} style={{ textAlign:"center", padding:"16px 12px", cursor:m.wa?"pointer":"default", border:m.wa?"1.5px solid "+C.yellow+"60":"1.5px solid "+C.brd, boxShadow:m.wa?"0 4px 16px rgba(255,211,0,.18)":"0 2px 12px rgba(142,9,207,.06)" }}>
+                    <div style={{ fontSize:m.l === "Investimento" ? 14 : m.wa ? 13 : 20, fontWeight:900, color:m.c, marginBottom:4, fontFamily:F.exo, lineHeight:1.2 }}>{m.v}</div>
                     <div style={{ fontSize:11, color:C.t3, fontWeight:700, textTransform:"uppercase", letterSpacing:.8, fontFamily:F.exo }}>{m.l}</div>
                   </Card>
                 ))}
