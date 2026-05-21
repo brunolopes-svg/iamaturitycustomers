@@ -3,7 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Descubra em 10 minutos o nível de maturidade em IA da sua empresa. Diagnóstico gratuito da Zenvia." />
     <title>Diagnóstico de IA — Zenvia</title>
+
+    <!-- ============================================================
+         GOOGLE ANALYTICS 4
+         SUBSTITUA G-WZC38HM6Q8 pelo seu Measurement ID real
+         Exemplo: G-AB12CD34EF
+    ============================================================ -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WZC38HM6Q8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-WZC38HM6Q8', {
+        page_title: 'Diagnóstico de IA Zenvia',
+        page_location: window.location.href
+      });
+
+      // Função auxiliar para enviar eventos ao GA4
+      window.trackGA4 = function(eventName, params) {
+        try { gtag('event', eventName, params || {}); } catch(e) {}
+      };
+    </script>
+    <!-- ============================================================ -->
+
   </head>
   <body>
     <div id="root"></div>
