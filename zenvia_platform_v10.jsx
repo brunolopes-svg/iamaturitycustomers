@@ -939,7 +939,7 @@ function Landing({ onStart }) {
             Do ZCC Atrair ao ZCC Servir — do chatbot ao AI Agent — do diagnóstico à operação autônoma.
           </p>
           <div style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap", marginBottom:48 }}>
-            <button onClick={onStart} style={{ background:G.brand, color:"#fff", border:"none", borderRadius:12, padding:"17px 44px", fontSize:16, fontWeight:700, cursor:"pointer", boxShadow:"0 10px 40px rgba(142,9,207,.4)", fontFamily:F.exo, letterSpacing:.5 }}>
+            <button onClick={()=>{ onStart(); trackEvent("cta_click"); }} style={{ background:G.brand, color:"#fff", border:"none", borderRadius:12, padding:"17px 44px", fontSize:16, fontWeight:700, cursor:"pointer", boxShadow:"0 10px 40px rgba(142,9,207,.4)", fontFamily:F.exo, letterSpacing:.5 }}>
               Descobrir Como Está Minha Empresa
             </button>
             <button onClick={()=>window.open("https://wa.me/551148377415?text=Olá,%20vim%20pelo%20Diagnóstico%20de%20IA%20da%20Zenvia%20e%20gostaria%20de%20falar%20com%20um%20especialista.","_blank")} style={{ background:"rgba(255,255,255,.08)", color:"rgba(255,255,255,.9)", border:"1px solid rgba(255,255,255,.22)", borderRadius:12, padding:"17px 28px", fontSize:16, cursor:"pointer", fontFamily:F.nunito, fontWeight:"600" }}>
@@ -1845,9 +1845,47 @@ function Results({ scores, ctx, ucId, narrative, onBack }) {
   );
 }
 
+// ── EVENT TRACKING (conecta com o Dashboard de Métricas) ─────────
+// Gera sessionId único por visita e persiste no localStorage
+function getSessionId() {
+  let sid = sessionStorage.getItem("z_session");
+  if (!sid) {
+    sid = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    sessionStorage.setItem("z_session", sid);
+  }
+  return sid;
+}
+function trackEvent(stage, ucId) {
+  try {
+    // 1. Salva no localStorage (Dashboard de Métricas)
+    const events = JSON.parse(localStorage.getItem("zenvia_events") || "[]");
+    events.push({ id: getSessionId(), stage, uc: ucId || null, ts: Date.now() });
+    localStorage.setItem("zenvia_events", JSON.stringify(events));
+
+    // 2. Envia para Google Analytics 4 (relatórios em tempo real)
+    const GA4_NAMES = {
+      landing:    "diagnostico_abertura",
+      cta_click:  "diagnostico_cta_clicado",
+      usecase:    "diagnostico_objetivo_escolhido",
+      onboarding: "diagnostico_empresa_preenchida",
+      assessment: "diagnostico_perguntas_iniciadas",
+      results:    "diagnostico_resultado_visto",
+      pdf:        "diagnostico_pdf_baixado",
+    };
+    if (typeof gtag !== "undefined") {
+      gtag("event", GA4_NAMES[stage] || stage, {
+        event_category:  "Funil Diagnóstico",
+        event_label:     ucId || "geral",
+        caso_de_uso:     ucId || "nenhum",
+        etapa_do_funil:  stage,
+      });
+    }
+  } catch(e) {}
+}
+
 // ── APP ROOT ──────────────────────────────────────────────────────
 export default function App() {
-  const [screen,    setScreen]    = useState("landing");
+  const [screen,    setScreen]    = useState(() => { trackEvent("landing"); return "landing"; });
   const [ucId,      setUcId]      = useState(null);
   const [ctx,       setCtx]       = useState({});
   const [responses, setResponses] = useState({});
@@ -1858,6 +1896,7 @@ export default function App() {
     const s = calcScores(responses, ucId);
     s._resp = responses;
     setScores(s);
+    trackEvent("results", ucId);
     setScreen("results");
     const n = await fetchNarrative(s, ctx, ucId);
     if (n) setNarrative(n);
@@ -1870,21 +1909,21 @@ export default function App() {
       {screen === "usecase"  && (
         <UseCaseSelector
           onBack={() => setScreen("landing")}
-          onSelect={id => { setUcId(id); setScreen("onboarding"); }}
+          onSelect={id => { setUcId(id); setScreen("onboarding"); trackEvent("usecase", id); }}
         />
       )}
       {screen === "onboarding" && ucId && (
         <Onboarding
           ucId={ucId}
           onBack={() => setScreen("usecase")}
-          onNext={c => { setCtx(c); setScreen("assessment"); }}
+          onNext={c => { setCtx(c); setScreen("assessment"); trackEvent("onboarding", ucId); }}
         />
       )}
       {screen === "assessment" && ucId && (
         <Assessment
           ucId={ucId}
           onBack={() => setScreen("onboarding")}
-          onComplete={r => { setResponses(r); setScreen("processing"); }}
+          onComplete={r => { setResponses(r); setScreen("processing"); trackEvent("assessment", ucId); }}
         />
       )}
       {screen === "processing" && ucId && (
