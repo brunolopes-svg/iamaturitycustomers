@@ -794,7 +794,7 @@ function openPDF(scores, ctx, narrative, ucId) {
     "<div style='background:linear-gradient(135deg,#8E09CF,#EC0886);border-radius:12px;padding:22px;color:#fff;text-align:center;margin-top:16px'>" +
     "<div style='font-size:18px;font-weight:800;margin-bottom:6px;font-family:Exo 2,sans-serif'>Pronto para começar?</div>" +
     "<div style='font-size:13px;color:rgba(255,255,255,.85);margin-bottom:10px'>Agende uma sessão estratégica com nosso time de especialistas.</div>" +
-    "<div style='font-size:14px;font-weight:800;font-family:Exo 2,sans-serif'>zenvia.com</div></div>" +
+    "<a href='https://wa.me/551148377415' style='display:inline-block;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.6);color:#fff;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:800;font-family:Exo 2,sans-serif;text-decoration:none;margin-top:4px'>💬 Agendar via WhatsApp +55 11 4837-7415</a></div>" +
     "<div class='footer'><span>ZENVIA — Especialistas em CX e IA Agêntica</span><span>" + (ctx.name || "") + " • Confidencial</span><span>Pág. 6</span></div></div>" +
     "<script>window.onload=function(){setTimeout(function(){window.print();},1500);};<\/script></body></html>";
 
@@ -1828,8 +1828,11 @@ function Results({ scores, ctx, ucId, narrative, onBack }) {
               <div style={{ fontSize:13, color:C.t2, fontFamily:F.nunito }}>Especialistas Zenvia prontos para construir seu plano personalizado.</div>
             </div>
             <div style={{ display:"flex", gap:10 }}>
-              <button style={{ background:G.brand, color:"#fff", border:"none", borderRadius:10, padding:"12px 28px", fontSize:14, fontWeight:700, cursor:"pointer", fontFamily:F.exo }}>
-                Agendar Sessão Estratégica
+              <button
+                onClick={()=>window.open("https://wa.me/551148377415?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20sess%C3%A3o%20estrat%C3%A9gica%20com%20um%20especialista%20Zenvia.","_blank")}
+                style={{ background:G.brand, color:"#fff", border:"none", borderRadius:10, padding:"12px 28px", fontSize:14, fontWeight:700, cursor:"pointer", fontFamily:F.exo, display:"flex", alignItems:"center", gap:8 }}
+              >
+                💬 Agendar Sessão Estratégica
               </button>
               <button onClick={handlePDF} style={{ background:"rgba(255,255,255,.06)", color:C.t1, border:"1px solid " + C.brd, borderRadius:10, padding:"12px 18px", fontSize:14, cursor:"pointer", fontFamily:F.nunito }}>
                 ↓ PDF
