@@ -1,1 +1,15 @@
-{"name":"zenvia-diagnostico","dependencies":{"react":"^18.2.0","react-dom":"^18.2.0","recharts":"^2.8.0"},"scripts":{"build":"vite build","dev":"vite"}}
+{
+  "name": "zenvia-diagnostico",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npx vite build",
+    "dev": "npx vite"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recharts": "^2.8.0",
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.2.0"
+  }
+}
